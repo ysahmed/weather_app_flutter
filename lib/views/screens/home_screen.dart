@@ -1,6 +1,7 @@
+import 'package:Weather/services/network/openweather.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:weather_app_flutter/views/widgets/suggestion_card.dart';
+import 'package:Weather/views/widgets/suggestion_card.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,8 +16,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    controller = PageController(viewportFraction: 1);
     super.initState();
+    controller = PageController(viewportFraction: 1);
+    OpenWeather.getData();
   }
 
   @override
