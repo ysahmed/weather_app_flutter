@@ -8,7 +8,7 @@ import 'package:Weather/secrets/api_key.dart';
 import 'package:http/http.dart' as http;
 
 class OpenWeather {
-  static Future getData() async {
+  static Future<Weather> getData() async {
     try {
       final location = LocationService.location;
       final locationData = await location.getLocation();

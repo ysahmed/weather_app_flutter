@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class CurrentWeather {
   final Coord coord;
   final String? sky;
@@ -8,6 +10,7 @@ class CurrentWeather {
   final double? minTemperature;
   final double? maxTemperature;
   final int humidity;
+  final int pressure;
 
   final double? windSpeed;
   final int? windAngle;
@@ -17,10 +20,8 @@ class CurrentWeather {
 
   final int? dateTimeUTC;
 
-  final int? sunriseUTC;
-  final int? sunsetUTC;
-
-  final int? timezone;
+  final String sunrise;
+  final String sunset;
 
   final int? visibility;
 
@@ -36,37 +37,46 @@ class CurrentWeather {
       required this.minTemperature,
       required this.maxTemperature,
       required this.humidity,
+      required this.pressure,
       required this.windSpeed,
       required this.windAngle,
       required this.windGust,
       required this.cloudiness,
       required this.dateTimeUTC,
-      required this.sunriseUTC,
-      required this.sunsetUTC,
-      required this.timezone,
+      required this.sunrise,
+      required this.sunset,
       required this.visibility,
       required this.country,
       required this.cityName});
 
   factory CurrentWeather.fromJson(Map<String, dynamic> json) {
+    int _sunrise = json['sys']['sunrise'];
+    int _sunset = json['sys']['sunset'];
+    int _timezone = json['timezone'];
     return CurrentWeather(
       coord: Coord.fromJson(json['coord']),
       sky: json['weather'][0]['main'],
       description: json['weather'][0]['description'],
-      temperature: json['main']['temp'],
-      feelsLike: json['main']['feels_like'],
-      minTemperature: json['main']['temp_min'],
-      maxTemperature: json['main']['temp_max'],
+      temperature: json['main']['temp']?.toDouble(),
+      feelsLike: json['main']['feels_like']?.toDouble(),
+      minTemperature: json['main']['temp_min']?.toDouble(),
+      maxTemperature: json['main']['temp_max']?.toDouble(),
       humidity: json['main']['humidity'],
+      pressure: json['main']['pressure'],
       visibility: json['visibility'],
-      windSpeed: json['wind']['speed'],
+      windSpeed: json['wind']['speed']?.toDouble(),
       windAngle: json['wind']['deg'],
-      windGust: json['wind']['gust'],
+      windGust: json['wind']['gust']?.toDouble(),
       dateTimeUTC: json['dt'],
-      sunriseUTC: json['sys']['sunrise'],
-      sunsetUTC: json['sys']['sunset'],
+      sunrise: DateFormat.jm().format(
+        DateTime.fromMillisecondsSinceEpoch((_sunrise + _timezone) * 1000,
+            isUtc: true),
+      ),
+      sunset: DateFormat.jm().format(
+        DateTime.fromMillisecondsSinceEpoch((_sunset + _timezone) * 1000,
+            isUtc: true),
+      ),
       country: json['sys']['country'],
-      timezone: json['timezone'],
       cityName: json['name'],
       cloudiness: json['clouds']['all'],
     );
@@ -84,8 +94,8 @@ class Coord {
 
   factory Coord.fromJson(Map<String, dynamic> json) {
     return Coord(
-      lon: json['lon'].toDouble(),
-      lat: json['lat'].toDouble(),
+      lon: json['lon']?.toDouble(),
+      lat: json['lat']?.toDouble(),
     );
   }
 }
