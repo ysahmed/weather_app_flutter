@@ -6,7 +6,7 @@ import 'package:location/location.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Location location = LocationService.location;
+  var location = LocationService.location;
   bool serviceEnabled;
   PermissionStatus permissionGranted;
 
@@ -23,7 +23,7 @@ Future<void> main() async {
         return;
       }
     }
-  } on Exception catch (e) {
+  } catch (e) {
     runApp(
       const MaterialApp(
         home: LocationServiceNotEnabledScreen(),
@@ -58,9 +58,38 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    const colorPrimary = Color.fromARGB(255, 75, 82, 95);
+    const colorAccent = Colors.white;
     return MaterialApp(
       title: 'Weather',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        cardTheme: const CardTheme(
+          color: colorPrimary,
+        ),
+        textTheme: const TextTheme(
+            displayLarge: TextStyle(
+              fontSize: 56,
+              color: colorPrimary,
+              fontWeight: FontWeight.bold,
+            ),
+            headlineSmall: TextStyle(
+              fontSize: 30,
+              color: colorAccent,
+              fontWeight: FontWeight.bold,
+            ),
+            titleLarge: TextStyle(
+              fontSize: 20,
+              color: colorPrimary,
+              fontWeight: FontWeight.w400,
+            ),
+            bodyMedium: TextStyle(
+              fontSize: 16,
+              color: colorPrimary,
+            ),
+            bodySmall: TextStyle(
+              color: colorAccent,
+            )),
         useMaterial3: true,
       ),
       home: const HomeScreen(),

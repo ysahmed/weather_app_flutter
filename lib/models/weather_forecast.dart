@@ -1,34 +1,48 @@
 // import 'package:fl_chart/fl_chart.dart';
 import 'package:fl_chart/src/chart/base/axis_chart/axis_chart_data.dart';
+import 'package:intl/intl.dart';
 
 class WeatherForecast {
   final int? cnt;
   final List<Forecast> forecasts;
   final List<FlSpot> spots;
+  final double flMin;
+  final double flMax;
 
   WeatherForecast({
     required this.cnt,
     required this.forecasts,
     required this.spots,
+    required this.flMin,
+    required this.flMax,
   });
 
   factory WeatherForecast.fromJson(Map<String, dynamic> json) {
     double x = 1;
+    List<FlSpot> flSpots = [];
+    double min = 500;
+    double max = -500;
     return WeatherForecast(
       cnt: json['cnt'],
       forecasts: List<Forecast>.from(
-          json['list'].map((data) => Forecast.fromJson(data))),
-      spots: List<FlSpot>.from(
-        json['list'].map((data) {
-          return FlSpot(x++, data['main']['temp']?.toDouble());
-        }),
+        json['list'].map(
+          (data) {
+            double current = data['main']['temp']?.toDouble();
+            min = current < min ? current : min;
+            max = current > max ? current : max;
+            flSpots.add(FlSpot(x++, current));
+            return Forecast.fromJson(data);
+          },
+        ),
       ),
+      spots: flSpots,
+      flMin: min,
+      flMax: max,
     );
   }
 }
 
 class Forecast {
-  final int? dt;
   // main
   final double? temp;
   final double? feelsLike;
@@ -52,9 +66,11 @@ class Forecast {
   final String? pod;
 
   final String? dtTxt;
+  final String? day;
+  final String? hr;
+  final String? icon;
 
   Forecast({
-    required this.dt,
     required this.temp,
     required this.feelsLike,
     required this.tempMin,
@@ -72,6 +88,9 @@ class Forecast {
     required this.pop,
     required this.pod,
     required this.dtTxt,
+    required this.day,
+    required this.hr,
+    required this.icon,
   });
 
   @override
@@ -80,25 +99,57 @@ class Forecast {
   }
 
   factory Forecast.fromJson(Map<String, dynamic> json) {
+    String pod = "";
+    String sky = "";
+    String day = "";
+    String hr = "";
+    int h = 0;
     return Forecast(
-      dt: json['dt'],
-      sky: json['weather'][0]['main'],
-      description: json['weather'][0]['description'],
-      cloudiness: json['clouds']['all'],
-      temp: json['main']['temp']?.toDouble(),
-      feelsLike: json['main']['feels_like']?.toDouble(),
-      tempMin: json['main']['temp_min']?.toDouble(),
-      tempMax: json['main']['temp_max']?.toDouble(),
-      pressure: json['main']['pressure'],
-      humidity: json['main']['humidity'],
-      tempKf: json['main']['temp_kf']?.toDouble(),
-      windSpeed: json['wind']['speed']?.toDouble(),
-      deg: json['wind']['deg'],
-      gust: json['wind']['gust']?.toDouble(),
-      visibility: json['visibility'],
-      pop: json['pop']?.toDouble(),
-      pod: json['sys']['pod'],
-      dtTxt: json['dt_txt'],
-    );
+        sky: () {
+          sky = json['weather'][0]['main'];
+          return sky;
+        }(),
+        dtTxt: () {
+          String _dt = json['dt_txt'];
+          DateTime _pdt = DateTime.parse(_dt);
+          day = DateFormat('E').format(_pdt);
+          hr = DateFormat.j().format(_pdt);
+          h = int.parse(DateFormat.H().format(_pdt));
+          return _dt;
+        }(),
+        day: day,
+        hr: hr,
+        description: json['weather'][0]['description'],
+        cloudiness: json['clouds']['all'],
+        temp: json['main']['temp']?.toDouble(),
+        feelsLike: json['main']['feels_like']?.toDouble(),
+        tempMin: json['main']['temp_min']?.toDouble(),
+        tempMax: json['main']['temp_max']?.toDouble(),
+        pressure: json['main']['pressure'],
+        humidity: json['main']['humidity'],
+        tempKf: json['main']['temp_kf']?.toDouble(),
+        windSpeed: json['wind']['speed']?.toDouble(),
+        deg: json['wind']['deg'],
+        gust: json['wind']['gust']?.toDouble(),
+        visibility: json['visibility'],
+        pop: json['pop']?.toDouble(),
+        pod: () {
+          if ((h > 17 && h < 23) || (h >= 0 && h < 5)) {
+            pod = "n";
+          } else {
+            pod = "d";
+          }
+          return pod;
+        }(),
+        icon: () {
+          String icon;
+          if (sky == "Clear" || sky == "Haze" || sky == "Squall") {
+            icon = "${sky.toLowerCase()}_$pod";
+          } else {
+            icon = sky.toLowerCase();
+          }
+
+          return "assets/images/$icon.svg";
+        }());
   }
 }

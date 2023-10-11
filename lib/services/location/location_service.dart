@@ -2,10 +2,13 @@ import 'package:location/location.dart';
 
 class LocationService {
   LocationService._();
-  static final Location _location = Location();
+  static Location? _location;
 
   static Location get location {
-    _location.changeSettings(accuracy: LocationAccuracy.high);
-    return _location;
+    if (_location == null) {
+      _location = Location();
+      _location!.changeSettings(accuracy: LocationAccuracy.high);
+    }
+    return _location!;
   }
 }

@@ -21,10 +21,15 @@ class _SuggestionCardState extends State<SuggestionCard> {
       child: Column(children: [
         Text(
           widget.title,
-          style: const TextStyle(fontSize: 20),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Colors.white,
+              ),
         ),
         Text(
           widget.subtitle,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Colors.white,
+              ),
         )
       ]),
     );
