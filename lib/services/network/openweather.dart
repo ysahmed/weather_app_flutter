@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:Weather/utils/country.dart';
+import 'package:Weather/models/city.dart';
 import 'package:Weather/models/current_weather.dart';
 import 'package:Weather/models/weather_forecast.dart';
 import 'package:Weather/models/weather.dart';
@@ -53,6 +55,41 @@ class OpenWeather {
       }
     } on http.ClientException {
       throw "No internet may be";
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<List<City>> searchCities({required String query}) async {
+    const limit = 5;
+    final url =
+        'https://api.openweathermap.org/geo/1.0/direct?q=$query&limit=$limit&appid=$apiKey';
+
+    final response = await http.get(Uri.parse(url));
+    final body = jsonDecode(response.body);
+
+    try {
+      if (response.statusCode == 200) {
+        return body.map<City>(
+          (json) {
+            final _city = json['name'];
+            final _state = json['state'];
+            final _country = country[json['country']];
+            final _lat = json['lat']?.toDouble();
+            final _lon = json['lon']?.toDouble();
+
+            return City(
+              city: _city,
+              state: _state,
+              country: _country,
+              lat: _lat,
+              lon: _lon,
+            );
+          },
+        ).toList();
+      } else {
+        throw "Something went wrong.";
+      }
     } catch (e) {
       rethrow;
     }

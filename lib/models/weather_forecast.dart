@@ -31,7 +31,7 @@ class WeatherForecast {
             min = current < min ? current : min;
             max = current > max ? current : max;
             flSpots.add(FlSpot(x++, current));
-            return Forecast.fromJson(data);
+            return Forecast.fromJson(data, json['city']['timezone']);
           },
         ),
       ),
@@ -65,7 +65,7 @@ class Forecast {
 
   final String? pod;
 
-  final String? dtTxt;
+  final int? dt;
   final String? day;
   final String? hr;
   final String? icon;
@@ -87,7 +87,7 @@ class Forecast {
     required this.visibility,
     required this.pop,
     required this.pod,
-    required this.dtTxt,
+    required this.dt,
     required this.day,
     required this.hr,
     required this.icon,
@@ -98,7 +98,8 @@ class Forecast {
     return "$temp $feelsLike $humidity";
   }
 
-  factory Forecast.fromJson(Map<String, dynamic> json) {
+  factory Forecast.fromJson(Map<String, dynamic> json, int timezone) {
+    //int timezone = json['city']['timezone'];
     String pod = "";
     String sky = "";
     String day = "";
@@ -109,9 +110,10 @@ class Forecast {
           sky = json['weather'][0]['main'];
           return sky;
         }(),
-        dtTxt: () {
-          String _dt = json['dt_txt'];
-          DateTime _pdt = DateTime.parse(_dt);
+        dt: () {
+          int _dt = json['dt'];
+          DateTime _pdt = DateTime.fromMillisecondsSinceEpoch((_dt) * 1000);
+          // .add(Duration(seconds: timezone));
           day = DateFormat('E').format(_pdt);
           hr = DateFormat.j().format(_pdt);
           h = int.parse(DateFormat.H().format(_pdt));
@@ -133,6 +135,10 @@ class Forecast {
         gust: json['wind']['gust']?.toDouble(),
         visibility: json['visibility'],
         pop: json['pop']?.toDouble(),
+        // pod: () {
+        //   pod = json['sys']['pod'];
+        //   return pod;
+        // }(),
         pod: () {
           if ((h > 17 && h < 23) || (h >= 0 && h < 5)) {
             pod = "n";

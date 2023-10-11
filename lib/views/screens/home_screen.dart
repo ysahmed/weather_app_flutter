@@ -1,5 +1,7 @@
+import 'package:Weather/models/city.dart';
 import 'package:Weather/models/weather.dart';
 import 'package:Weather/services/network/openweather.dart';
+import 'package:Weather/views/screens/search_city_screen.dart';
 import 'package:Weather/views/widgets/additional_info_widget.dart';
 import 'package:Weather/views/widgets/current_brief.dart';
 import 'package:Weather/views/widgets/forecasts_widget.dart';
@@ -17,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   PageController controller = PageController();
   late Future<Weather?> weather;
+
   @override
   void initState() {
     super.initState();
@@ -61,6 +64,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  weather = OpenWeather.getData();
+                                });
+                              },
+                              icon: const Icon(Icons.refresh_outlined)),
+                          IconButton(
+                            onPressed: () async {
+                              String city = await showSearch(
+                                context: context,
+                                delegate: SearchCityScreen(),
+                              );
+                              setState(() {
+                                weather = OpenWeather.getData(city);
+                              });
+                            },
+                            icon: const Icon(Icons.search_outlined),
+                          ),
+                        ],
+                      ),
                       const SizedBox(
                         height: 120,
                       ),

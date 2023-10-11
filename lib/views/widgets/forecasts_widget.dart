@@ -37,8 +37,8 @@ class ForeCastsWidget extends StatelessWidget {
                       borderData: FlBorderData(show: false),
                       minX: 1,
                       maxX: forecast!.forecasts.length.toDouble() + 1,
-                      minY: forecast!.flMin - 20,
-                      maxY: forecast!.flMax + 10,
+                      minY: forecast!.flMin - 30,
+                      maxY: forecast!.flMax + 16,
                       lineBarsData: [
                         LineChartBarData(
                           color: Colors.white,
@@ -75,80 +75,77 @@ class ForeCastsWidget extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  top: chartHeight - rowItemHeight - 14,
+                  top: chartHeight - rowItemHeight - 8,
                   child: SizedBox(
                     width: chartWidth,
                     height: rowItemHeight,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         for (int i = 0;
                             i < forecast!.forecasts.length;
                             i++) ...[
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 9.2),
-                            child: Column(
-                              children: [
-                                // temp
-                                Text(
-                                  "${forecast!.forecasts[i].temp?.toInt()}°",
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                                const SizedBox(
-                                  height: 4,
-                                ),
-                                // icon
-                                SvgPicture.asset(
-                                  forecast!.forecasts[i].icon!,
-                                  colorFilter: svgColorFilter,
-                                  height: 25,
-                                  width: 25,
-                                ),
-                                // pop
-                                Text(
-                                  () {
-                                    if (forecast!.forecasts[i].pop! >= 30) {
-                                      return "${forecast!.forecasts[i].pop!.toInt()}%";
-                                    } else {
-                                      return "";
-                                    }
-                                  }(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall
-                                      ?.copyWith(
-                                        height: 0.5,
-                                        color: const Color.fromARGB(
-                                            255, 0, 238, 255),
-                                      ),
-                                ),
-                                // spacer
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                // day
-                                Text(
-                                  "${forecast!.forecasts[i].day}",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                // hour
-                                Text(
-                                  "${forecast!.forecasts[i].hr}",
-                                  maxLines: 1,
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                                // max/min
-                                Text(
-                                  "${forecast!.forecasts[i].tempMax?.toInt()}°/${forecast!.forecasts[i].tempMin?.toInt()}°",
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                )
-                              ],
-                            ),
+                          Column(
+                            children: [
+                              // temp
+                              Text(
+                                "${forecast!.forecasts[i].temp?.toInt()}°",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              const SizedBox(
+                                height: 4,
+                              ),
+                              // icon
+                              SvgPicture.asset(
+                                forecast!.forecasts[i].icon!,
+                                colorFilter: svgColorFilter,
+                                height: 25,
+                                width: 25,
+                              ),
+                              // pop
+                              Text(
+                                () {
+                                  if (forecast!.forecasts[i].pop! >= 30) {
+                                    return "${forecast!.forecasts[i].pop!.toInt()}%";
+                                  } else {
+                                    return "";
+                                  }
+                                }(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      height: 0.5,
+                                      color: const Color.fromARGB(
+                                          255, 0, 238, 255),
+                                    ),
+                              ),
+                              // spacer
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              // day
+                              Text(
+                                "${forecast!.forecasts[i].day}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                              // hour
+                              Text(
+                                "${forecast!.forecasts[i].hr}",
+                                maxLines: 1,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              // max/min
+                              Text(
+                                "${forecast!.forecasts[i].tempMax?.toInt()}°/${forecast!.forecasts[i].tempMin?.toInt()}°",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              )
+                            ],
                           ),
                         ],
                       ],
@@ -160,7 +157,7 @@ class ForeCastsWidget extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 10,
+          top: 12,
           left: 12,
           child: Text(
             "Temperature",

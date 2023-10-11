@@ -18,7 +18,7 @@ class CurrentWeather {
 
   final int? cloudiness;
 
-  final int? dateTimeUTC;
+  final int? dateTimeUnix;
 
   final String sunrise;
   final String sunset;
@@ -42,7 +42,7 @@ class CurrentWeather {
       required this.windAngle,
       required this.windGust,
       required this.cloudiness,
-      required this.dateTimeUTC,
+      required this.dateTimeUnix,
       required this.sunrise,
       required this.sunset,
       required this.visibility,
@@ -67,7 +67,7 @@ class CurrentWeather {
       windSpeed: json['wind']['speed']?.toDouble(),
       windAngle: json['wind']['deg'],
       windGust: json['wind']['gust']?.toDouble(),
-      dateTimeUTC: json['dt'],
+      dateTimeUnix: json['dt'],
       sunrise: DateFormat.jm().format(
         DateTime.fromMillisecondsSinceEpoch((_sunrise + _timezone) * 1000,
             isUtc: true),
