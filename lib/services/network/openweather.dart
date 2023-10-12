@@ -1,12 +1,13 @@
 import 'dart:convert';
 
-import 'package:Weather/utils/country.dart';
-import 'package:Weather/models/city.dart';
-import 'package:Weather/models/current_weather.dart';
-import 'package:Weather/models/weather_forecast.dart';
-import 'package:Weather/models/weather.dart';
-import 'package:Weather/services/location/location_service.dart';
-import 'package:Weather/secrets/api_key.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:weather/utils/countries.dart';
+import 'package:weather/models/city.dart';
+import 'package:weather/models/current_weather.dart';
+import 'package:weather/models/weather_forecast.dart';
+import 'package:weather/models/weather.dart';
+// import 'package:weather/services/location/location_service.dart';
+import 'package:weather/secrets/api_key.dart';
 import 'package:http/http.dart' as http;
 
 class OpenWeather {
@@ -17,10 +18,14 @@ class OpenWeather {
       if (city != null) {
         query = "q=$city";
       } else {
-        final location = LocationService.location;
-        final locationData = await location.getLocation();
-        final lat = locationData.latitude;
-        final lon = locationData.longitude;
+        final location = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        final lat = location.latitude;
+        final lon = location.longitude;
+        // final location = LocationService.location;
+        // final locationData = await location.getLocation();
+        // final lat = locationData.latitude;
+        // final lon = locationData.longitude;
 
         query = "lat=$lat&lon=$lon";
       }
@@ -72,18 +77,18 @@ class OpenWeather {
       if (response.statusCode == 200) {
         return body.map<City>(
           (json) {
-            final _city = json['name'];
-            final _state = json['state'];
-            final _country = country[json['country']];
-            final _lat = json['lat']?.toDouble();
-            final _lon = json['lon']?.toDouble();
+            final city = json['name'];
+            final state = json['state'];
+            final country = countries[json['country']];
+            final lat = json['lat']?.toDouble();
+            final lon = json['lon']?.toDouble();
 
             return City(
-              city: _city,
-              state: _state,
-              country: _country,
-              lat: _lat,
-              lon: _lon,
+              city: city,
+              state: state,
+              country: country,
+              lat: lat,
+              lon: lon,
             );
           },
         ).toList();

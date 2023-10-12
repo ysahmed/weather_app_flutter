@@ -1,4 +1,4 @@
-import 'package:Weather/models/weather_forecast.dart';
+import 'package:weather/models/weather_forecast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -41,8 +41,9 @@ class ForeCastsWidget extends StatelessWidget {
                       maxY: forecast!.flMax + 16,
                       lineBarsData: [
                         LineChartBarData(
-                          color: Colors.white,
+                          color: Colors.white54,
                           isCurved: false,
+                          barWidth: 2,
                           spots: <FlSpot>[
                             ...forecast!.spots,
                             FlSpot(
@@ -55,17 +56,23 @@ class ForeCastsWidget extends StatelessWidget {
                             getDotPainter: (spot, percent, barData, index) {
                               return FlDotCirclePainter(
                                 radius: 2,
-                                color: Colors.black,
+                                color: Colors.white,
                                 strokeWidth: 0,
                               );
                             },
                           ),
                           belowBarData: BarAreaData(
-                            show: false,
+                            show: true,
                             gradient: const LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
                               colors: [
-                                Colors.white54,
+                                Color.fromARGB(0, 255, 255, 255),
+                                Color.fromARGB(0, 255, 255, 255),
+                                Colors.white12,
+                                Colors.white12,
                                 Colors.white24,
+                                Colors.white38,
                               ],
                             ),
                           ),
@@ -157,8 +164,8 @@ class ForeCastsWidget extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 12,
-          left: 12,
+          top: 14,
+          left: 14,
           child: Text(
             "Temperature",
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(

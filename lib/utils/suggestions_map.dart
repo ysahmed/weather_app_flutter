@@ -1,5 +1,6 @@
-Map<String, String> weatherSuggestions = {
+Map<String, String> titles = {
   'clear sky': 'Sunglasses on',
+  'clear sky n': 'Look up!',
   'few clouds': 'Don\'t stop the fun',
   'scattered clouds': 'Carry sunglasses',
   'broken clouds': 'Clouds trying to break your sunshine? Nah!',
@@ -23,8 +24,9 @@ Map<String, String> weatherSuggestions = {
   'smoke': 'BBQ party or just smokin\' views?',
 };
 
-Map<String, String> weatherDescriptions = {
+Map<String, String> subTitles = {
   'clear sky': 'Sun\'s out',
+  'clear sky n': 'Starry night!',
   'few clouds': 'Clouds, just visiting.',
   'scattered clouds': 'Cloudy, sun peeking through.',
   'broken clouds': 'Cloudy no rainy.',

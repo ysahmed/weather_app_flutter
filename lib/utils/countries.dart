@@ -1,4 +1,4 @@
-const Map<String, String> country = {
+const Map<String, String> countries = {
   'AF': 'Afghanistan',
   'AL': 'Albania',
   'DZ': 'Algeria',

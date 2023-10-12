@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-class SuggestionCard extends StatefulWidget {
+class SuggestionItem extends StatefulWidget {
   final String title;
   final String subtitle;
 
-  const SuggestionCard({
+  const SuggestionItem({
     super.key,
     required this.title,
     required this.subtitle,
   });
 
   @override
-  State<SuggestionCard> createState() => _SuggestionCardState();
+  State<SuggestionItem> createState() => _SuggestionItemState();
 }
 
-class _SuggestionCardState extends State<SuggestionCard> {
+class _SuggestionItemState extends State<SuggestionItem> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(

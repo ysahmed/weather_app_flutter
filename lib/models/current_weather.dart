@@ -1,3 +1,5 @@
+import 'package:weather/models/suggestion.dart';
+import 'package:weather/utils/suggestions_map.dart';
 import 'package:intl/intl.dart';
 
 class CurrentWeather {
@@ -28,36 +30,75 @@ class CurrentWeather {
   final String? country;
   final String? cityName;
 
-  CurrentWeather(
-      {required this.coord,
-      required this.sky,
-      required this.description,
-      required this.temperature,
-      required this.feelsLike,
-      required this.minTemperature,
-      required this.maxTemperature,
-      required this.humidity,
-      required this.pressure,
-      required this.windSpeed,
-      required this.windAngle,
-      required this.windGust,
-      required this.cloudiness,
-      required this.dateTimeUnix,
-      required this.sunrise,
-      required this.sunset,
-      required this.visibility,
-      required this.country,
-      required this.cityName});
+  final List<Suggestion> suggestions;
+
+  CurrentWeather({
+    required this.coord,
+    required this.sky,
+    required this.description,
+    required this.temperature,
+    required this.feelsLike,
+    required this.minTemperature,
+    required this.maxTemperature,
+    required this.humidity,
+    required this.pressure,
+    required this.windSpeed,
+    required this.windAngle,
+    required this.windGust,
+    required this.cloudiness,
+    required this.dateTimeUnix,
+    required this.sunrise,
+    required this.sunset,
+    required this.visibility,
+    required this.country,
+    required this.cityName,
+    required this.suggestions,
+  });
 
   factory CurrentWeather.fromJson(Map<String, dynamic> json) {
-    int _sunrise = json['sys']['sunrise'];
-    int _sunset = json['sys']['sunset'];
-    int _timezone = json['timezone'];
+    int sunrise = json['sys']['sunrise'];
+    int sunset = json['sys']['sunset'];
+    int timezone = json['timezone'];
+    List<Suggestion> suggestions = [];
     return CurrentWeather(
       coord: Coord.fromJson(json['coord']),
       sky: json['weather'][0]['main'],
-      description: json['weather'][0]['description'],
-      temperature: json['main']['temp']?.toDouble(),
+      temperature: () {
+        double temp = json['main']['temp']?.toDouble();
+        late Suggestion suggestion;
+        if (temp > 30) {
+          suggestion = Suggestion(
+              title: "Bring juice!",
+              subTitle: "Scorching heat. ${temp.toInt()}°C");
+        } else if (temp > 20) {
+          suggestion = Suggestion(
+              title: "Dress light",
+              subTitle: "Warm outside. ${temp.toInt()}°C");
+        } else if (temp > 10) {
+          suggestion = Suggestion(
+              title: "Sweaters on!",
+              subTitle: "Pretty cold. ${temp.toInt()}°C");
+        } else if (temp > 0) {
+          suggestion = Suggestion(
+              title: "Coffee?", subTitle: "Almost freezing. ${temp.toInt()}°C");
+        } else {
+          suggestion = Suggestion(
+              title: "Light the fire!",
+              subTitle: "Freezing cold. ${temp.toInt()}°C");
+        }
+        suggestions.add(suggestion);
+        return temp;
+      }(),
+      description: () {
+        String desc = json['weather'][0]['description'];
+        String pod = json['weather'][0]['icon'].substring(2);
+        String descPod;
+        descPod = pod == 'n' ? "$desc $pod" : desc;
+        suggestions.add(
+            Suggestion(title: titles[descPod], subTitle: subTitles[descPod]));
+        return desc;
+      }(),
+      suggestions: suggestions,
       feelsLike: json['main']['feels_like']?.toDouble(),
       minTemperature: json['main']['temp_min']?.toDouble(),
       maxTemperature: json['main']['temp_max']?.toDouble(),
@@ -69,11 +110,11 @@ class CurrentWeather {
       windGust: json['wind']['gust']?.toDouble(),
       dateTimeUnix: json['dt'],
       sunrise: DateFormat.jm().format(
-        DateTime.fromMillisecondsSinceEpoch((_sunrise + _timezone) * 1000,
+        DateTime.fromMillisecondsSinceEpoch((sunrise + timezone) * 1000,
             isUtc: true),
       ),
       sunset: DateFormat.jm().format(
-        DateTime.fromMillisecondsSinceEpoch((_sunset + _timezone) * 1000,
+        DateTime.fromMillisecondsSinceEpoch((sunset + timezone) * 1000,
             isUtc: true),
       ),
       country: json['sys']['country'],

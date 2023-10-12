@@ -1,5 +1,5 @@
-import 'package:Weather/models/current_weather.dart';
-import 'package:Weather/models/weather_forecast.dart';
+import 'package:weather/models/current_weather.dart';
+import 'package:weather/models/weather_forecast.dart';
 
 class Weather {
   final CurrentWeather _currentWeather;

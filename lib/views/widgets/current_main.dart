@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:Weather/models/current_weather.dart';
-import 'package:Weather/utils/country.dart';
+import 'package:weather/models/current_weather.dart';
+import 'package:weather/utils/countries.dart';
 
-class CurrentBrief extends StatelessWidget {
-  const CurrentBrief({
+class CurrentMain extends StatelessWidget {
+  const CurrentMain({
     super.key,
     required this.current,
   });
@@ -24,19 +24,13 @@ class CurrentBrief extends StatelessWidget {
           // city country
           if (current?.cityName != null)
             Text(
-              "${current?.cityName}, ${country[current?.country]}",
+              "${current?.cityName}, ${countries[current?.country]}",
               style: Theme.of(context).textTheme.titleLarge,
             ),
           // min max feels like
           Text(
             "${current?.maxTemperature?.toInt()}°/${current?.minTemperature?.toInt()}° | feels like ${current?.feelsLike?.toInt()}°",
             style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          // humidity
-          Text(
-            "Humidity: ${current?.humidity.toInt()}%",
-            style:
-                Theme.of(context).textTheme.bodyMedium?.copyWith(height: 0.8),
           ),
         ],
       ),

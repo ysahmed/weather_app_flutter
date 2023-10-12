@@ -1,4 +1,4 @@
-name: Weather
+name: weather
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -42,7 +42,8 @@ dev_dependencies:
   smooth_page_indicator: ^1.1.0
   flutter_svg: ^2.0.7
   http: ^1.1.0
-  location: ^5.0.3
+  # location: ^5.0.3
+  geolocator: ^10.1.0
   fl_chart: ^0.64.0
 
   # The "flutter_lints" package below contains a set of recommended lints to

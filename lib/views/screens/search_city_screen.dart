@@ -1,5 +1,5 @@
-import 'package:Weather/models/city.dart';
-import 'package:Weather/services/network/openweather.dart';
+import 'package:weather/models/city.dart';
+import 'package:weather/services/network/openweather.dart';
 import 'package:flutter/material.dart';
 
 class SearchCityScreen extends SearchDelegate {
@@ -46,23 +46,21 @@ class SearchCityScreen extends SearchDelegate {
       );
 
   @override
-  Widget buildSuggestions(BuildContext context) => Container(
-        child: FutureBuilder<List<City>>(
-          future: OpenWeather.searchCities(query: query),
-          builder: (context, snapshot) {
-            if (query.isEmpty) return buildNoSuggestions();
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return const Center(child: CircularProgressIndicator());
-              default:
-                if (snapshot.hasError || snapshot.data!.isEmpty) {
-                  return buildNoSuggestions();
-                } else {
-                  return buildSuggestionsOrResults(snapshot.data!);
-                }
-            }
-          },
-        ),
+  Widget buildSuggestions(BuildContext context) => FutureBuilder<List<City>>(
+        future: OpenWeather.searchCities(query: query),
+        builder: (context, snapshot) {
+          if (query.isEmpty) return buildNoSuggestions();
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return const Center(child: CircularProgressIndicator());
+            default:
+              if (snapshot.hasError || snapshot.data!.isEmpty) {
+                return buildNoSuggestions();
+              } else {
+                return buildSuggestionsOrResults(snapshot.data!);
+              }
+          }
+        },
       );
 
   Widget buildNoSuggestions() => const Center(

@@ -99,7 +99,6 @@ class Forecast {
   }
 
   factory Forecast.fromJson(Map<String, dynamic> json, int timezone) {
-    //int timezone = json['city']['timezone'];
     String pod = "";
     String sky = "";
     String day = "";
@@ -111,13 +110,13 @@ class Forecast {
           return sky;
         }(),
         dt: () {
-          int _dt = json['dt'];
-          DateTime _pdt = DateTime.fromMillisecondsSinceEpoch((_dt) * 1000);
+          int dt = json['dt'];
+          DateTime pdt = DateTime.fromMillisecondsSinceEpoch((dt) * 1000);
           // .add(Duration(seconds: timezone));
-          day = DateFormat('E').format(_pdt);
-          hr = DateFormat.j().format(_pdt);
-          h = int.parse(DateFormat.H().format(_pdt));
-          return _dt;
+          day = DateFormat('E').format(pdt);
+          hr = DateFormat.j().format(pdt);
+          h = int.parse(DateFormat.H().format(pdt));
+          return dt;
         }(),
         day: day,
         hr: hr,

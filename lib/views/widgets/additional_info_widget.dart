@@ -1,14 +1,17 @@
-import 'package:Weather/models/current_weather.dart';
+import 'package:weather/models/current_weather.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AdditionalInfoGrid extends StatelessWidget {
   const AdditionalInfoGrid({
     super.key,
     required this.current,
+    required this.count,
   });
 
   final CurrentWeather? current;
+  final int count;
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +22,11 @@ class AdditionalInfoGrid extends StatelessWidget {
 
     return GridView.count(
       childAspectRatio: 1,
-      crossAxisCount: 2,
+      crossAxisCount: count,
       physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(
+        vertical: 16,
+      ),
       shrinkWrap: true,
       mainAxisSpacing: 16,
       crossAxisSpacing: 16,
@@ -30,6 +35,7 @@ class AdditionalInfoGrid extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -50,11 +56,18 @@ class AdditionalInfoGrid extends StatelessWidget {
                   "${current?.sunrise}",
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
-                const Align(
-                  alignment: Alignment.center,
-                  child: Image(
-                      fit: BoxFit.contain,
-                      image: AssetImage("assets/images/sunrise.png")),
+                Align(
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(
+                      "assets/images/sunrise.svg",
+                      height: 60,
+                      colorFilter: svgColorFilter,
+                    )),
+                Text(
+                  "Sunset: ${current!.sunset.toString()}",
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.white,
+                      ),
                 )
               ],
             ),
@@ -64,40 +77,41 @@ class AdditionalInfoGrid extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     SvgPicture.asset(
-                      "assets/images/sunset.svg",
+                      "assets/images/humidity.svg",
                       colorFilter: svgColorFilter,
                       height: 25,
                       width: 25,
                     ),
                     Text(
-                      "  SUNSET",
+                      "  HUMIDITY",
                       style: titleTextStyle,
                     )
                   ],
                 ),
-                Text(
-                  "${current?.sunset}",
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const Align(
+                Align(
                   alignment: Alignment.center,
-                  child: Image(
-                      fit: BoxFit.contain,
-                      image: AssetImage("assets/images/sunrise.png")),
-                )
+                  child: Text(
+                    "${current!.humidity.toString()} %",
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                ),
+                const Text("")
               ],
             ),
           ),
         ),
+        // pressure
         Card(
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -114,23 +128,25 @@ class AdditionalInfoGrid extends StatelessWidget {
                     )
                   ],
                 ),
-                Text(
-                  "${current?.pressure} \nhPa",
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const Align(
+                Align(
                   alignment: Alignment.center,
-                  child: Text("pressure.svg"),
-                )
+                  child: Text(
+                    "${current?.pressure} hPa",
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                ),
+                const Text(""),
               ],
             ),
           ),
         ),
+        // wind
         Card(
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(
                   children: [
@@ -146,32 +162,40 @@ class AdditionalInfoGrid extends StatelessWidget {
                     )
                   ],
                 ),
-                Text(
-                  "${current?.windSpeed} km/h",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: Colors.white,
-                      ),
-                ),
                 Expanded(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Stack(
-                      children: [
-                        const Image(
+                  child: Stack(
+                    children: [
+                      const Center(
+                        child: Image(
                           image: AssetImage("assets/images/compass_dial.png"),
                           fit: BoxFit.cover,
                         ),
-                        Transform.rotate(
-                          angle: 45 * 3.14159265359 / 180,
+                      ),
+                      Center(
+                        child: Transform.rotate(
+                          angle: current!.windAngle! * 3.14159265359 / 180,
                           alignment: Alignment.center,
                           child: const Image(
                             image: AssetImage("assets/images/compass_hand.png"),
                             fit: BoxFit.cover,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      Center(
+                        child: LayoutBuilder(builder: (context, constraints) {
+                          var fontSize = constraints.maxWidth * 0.1;
+                          return Text("${current?.windSpeed}\nkm/h",
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                    fontSize: fontSize,
+                                    color: Colors.white,
+                                  ));
+                        }),
+                      ),
+                    ],
                   ),
                 ),
               ],
