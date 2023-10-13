@@ -3,6 +3,8 @@ import 'package:weather/services/network/openweather.dart';
 import 'package:flutter/material.dart';
 
 class SearchCityScreen extends SearchDelegate {
+  List<City> _results = [];
+
   @override
   List<Widget>? buildActions(BuildContext context) => [
         IconButton(
@@ -25,22 +27,8 @@ class SearchCityScreen extends SearchDelegate {
       );
 
   @override
-  Widget buildResults(BuildContext context) => Container(
-        color: Colors.black,
-        child: FutureBuilder<List<City>>(
-          future: OpenWeather.searchCities(query: query),
-          builder: (context, snapshot) {
-            if (query.isEmpty) return buildNoSuggestions();
-
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError || snapshot.data!.isEmpty) {
-              return buildNoSuggestions();
-            }
-            return buildSuggestionsOrResults(snapshot.data!);
-          },
-        ),
-      );
+  Widget buildResults(BuildContext context) =>
+      buildSuggestionsOrResults(_results);
 
   @override
   Widget buildSuggestions(BuildContext context) => FutureBuilder<List<City>>(
@@ -53,7 +41,8 @@ class SearchCityScreen extends SearchDelegate {
           } else if (snapshot.hasError || snapshot.data!.isEmpty) {
             return buildNoSuggestions();
           }
-          return buildSuggestionsOrResults(snapshot.data!);
+          _results = snapshot.data!;
+          return buildSuggestionsOrResults(_results);
         },
       );
 
@@ -64,10 +53,10 @@ class SearchCityScreen extends SearchDelegate {
         ),
       );
 
-  Widget buildSuggestionsOrResults(List<City> suggestions) => ListView.builder(
-        itemCount: suggestions.length,
+  Widget buildSuggestionsOrResults(List<City> results) => ListView.builder(
+        itemCount: results.length,
         itemBuilder: (context, index) {
-          final suggestion = suggestions[index];
+          final suggestion = results[index];
 
           return ListTile(
             onTap: () {

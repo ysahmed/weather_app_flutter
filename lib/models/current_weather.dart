@@ -3,7 +3,6 @@ import 'package:weather/utils/suggestions_map.dart';
 import 'package:intl/intl.dart';
 
 class CurrentWeather {
-  final Coord coord;
   final String? sky;
   final String? description;
 
@@ -33,7 +32,6 @@ class CurrentWeather {
   final List<Suggestion> suggestions;
 
   CurrentWeather({
-    required this.coord,
     required this.sky,
     required this.description,
     required this.temperature,
@@ -61,7 +59,6 @@ class CurrentWeather {
     int timezone = json['timezone'];
     List<Suggestion> suggestions = [];
     return CurrentWeather(
-      coord: Coord.fromJson(json['coord']),
       sky: json['weather'][0]['main'],
       description: () {
         String desc = json['weather'][0]['description'];
@@ -122,23 +119,6 @@ class CurrentWeather {
       country: json['sys']['country'],
       cityName: json['name'],
       cloudiness: json['clouds']['all'],
-    );
-  }
-}
-
-class Coord {
-  final double lon;
-  final double lat;
-
-  Coord({
-    required this.lon,
-    required this.lat,
-  });
-
-  factory Coord.fromJson(Map<String, dynamic> json) {
-    return Coord(
-      lon: json['lon']?.toDouble(),
-      lat: json['lat']?.toDouble(),
     );
   }
 }
