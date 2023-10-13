@@ -1,8 +1,6 @@
-// import 'package:Weather/services/location/location_service.dart';
 import 'package:weather/views/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-// import 'package:location/location.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +33,6 @@ Future<void> main() async {
         )),
     useMaterial3: true,
   );
-  // var location = LocationService.location;
   bool serviceEnabled;
   // PermissionStatus permissionGranted;
   LocationPermission permissionGranted;
@@ -87,41 +84,6 @@ Future<void> main() async {
     );
     return;
   }
-
-  // try {
-  //   serviceEnabled = await location.serviceEnabled();
-  //   if (!serviceEnabled) {
-  //     serviceEnabled = await location.requestService();
-  //     if (!serviceEnabled) {
-  //       runApp(
-  //         const MaterialApp(
-  //           home: LocationServiceNotEnabledScreen(),
-  //         ),
-  //       );
-  //       return;
-  //     }
-  //   }
-  // } catch (e) {
-  //   runApp(
-  //     const MaterialApp(
-  //       home: LocationServiceNotEnabledScreen(),
-  //     ),
-  //   );
-  //   return;
-  // }
-
-  // permissionGranted = await location.hasPermission();
-  // if (permissionGranted == PermissionStatus.denied) {
-  //   permissionGranted = await location.requestPermission();
-  //   if (permissionGranted != PermissionStatus.granted) {
-  //     runApp(
-  //       const MaterialApp(
-  //         home: LocationPermissionNotGrantedScreen(),
-  //       ),
-  //     );
-  //     return;
-  //   }
-  // }
 
   runApp(MaterialApp(
     title: 'Weather',

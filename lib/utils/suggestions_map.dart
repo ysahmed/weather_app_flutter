@@ -1,6 +1,7 @@
 Map<String, String> titles = {
   'clear sky': 'Sunglasses on',
   'clear sky n': 'Look up!',
+  'haze': 'Soft light, soft music?',
   'few clouds': 'Don\'t stop the fun',
   'scattered clouds': 'Carry sunglasses',
   'broken clouds': 'Clouds trying to break your sunshine? Nah!',
@@ -28,6 +29,7 @@ Map<String, String> subTitles = {
   'clear sky': 'Sun\'s out',
   'clear sky n': 'Starry night!',
   'few clouds': 'Clouds, just visiting.',
+  'haze': 'Haze everywhere',
   'scattered clouds': 'Cloudy, sun peeking through.',
   'broken clouds': 'Cloudy no rainy.',
   'overcast clouds': 'Gray skies, cozy vibes.',

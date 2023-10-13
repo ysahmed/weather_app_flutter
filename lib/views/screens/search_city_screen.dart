@@ -31,16 +31,13 @@ class SearchCityScreen extends SearchDelegate {
           future: OpenWeather.searchCities(query: query),
           builder: (context, snapshot) {
             if (query.isEmpty) return buildNoSuggestions();
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return const Center(child: CircularProgressIndicator());
-              default:
-                if (snapshot.hasError || snapshot.data!.isEmpty) {
-                  return buildNoSuggestions();
-                } else {
-                  return buildSuggestionsOrResults(snapshot.data!);
-                }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError || snapshot.data!.isEmpty) {
+              return buildNoSuggestions();
             }
+            return buildSuggestionsOrResults(snapshot.data!);
           },
         ),
       );
@@ -50,16 +47,13 @@ class SearchCityScreen extends SearchDelegate {
         future: OpenWeather.searchCities(query: query),
         builder: (context, snapshot) {
           if (query.isEmpty) return buildNoSuggestions();
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return const Center(child: CircularProgressIndicator());
-            default:
-              if (snapshot.hasError || snapshot.data!.isEmpty) {
-                return buildNoSuggestions();
-              } else {
-                return buildSuggestionsOrResults(snapshot.data!);
-              }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError || snapshot.data!.isEmpty) {
+            return buildNoSuggestions();
           }
+          return buildSuggestionsOrResults(snapshot.data!);
         },
       );
 

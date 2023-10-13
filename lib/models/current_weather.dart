@@ -63,6 +63,17 @@ class CurrentWeather {
     return CurrentWeather(
       coord: Coord.fromJson(json['coord']),
       sky: json['weather'][0]['main'],
+      description: () {
+        String desc = json['weather'][0]['description'];
+        String pod = json['weather'][0]['icon'].substring(2);
+        String descPod;
+        descPod = pod == 'n' ? "$desc $pod" : desc;
+        if (titles[descPod] != null) {
+          suggestions.add(
+              Suggestion(title: titles[descPod], subTitle: subTitles[descPod]));
+        }
+        return desc;
+      }(),
       temperature: () {
         double temp = json['main']['temp']?.toDouble();
         late Suggestion suggestion;
@@ -88,15 +99,6 @@ class CurrentWeather {
         }
         suggestions.add(suggestion);
         return temp;
-      }(),
-      description: () {
-        String desc = json['weather'][0]['description'];
-        String pod = json['weather'][0]['icon'].substring(2);
-        String descPod;
-        descPod = pod == 'n' ? "$desc $pod" : desc;
-        suggestions.add(
-            Suggestion(title: titles[descPod], subTitle: subTitles[descPod]));
-        return desc;
       }(),
       suggestions: suggestions,
       feelsLike: json['main']['feels_like']?.toDouble(),
